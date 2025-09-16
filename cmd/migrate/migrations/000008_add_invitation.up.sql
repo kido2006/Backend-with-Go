@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS user_invitations (
+  token VARBINARY(255) PRIMARY KEY,
+  user_id BIGINT NOT NULL
+);

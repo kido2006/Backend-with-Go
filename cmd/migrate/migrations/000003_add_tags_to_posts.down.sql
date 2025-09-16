@@ -1,0 +1,2 @@
+ALTER TABLE posts 
+MODIFY tags TEXT NULL;

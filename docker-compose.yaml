@@ -1,0 +1,43 @@
+services:
+  db:
+    image: mysql:8.4.6
+    container_name: backendwithgo-db-1
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: myapp
+      MYSQL_USER: niga
+      MYSQL_PASSWORD: 123456789
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  redis:
+    image: redis:7
+    container_name: backendwithgo-redis-1
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  app:
+    build: .
+    container_name: backendwithgo-app-1
+    depends_on:
+      - db
+      - redis
+    environment:
+      ADDR: ":8081"
+      DB_ADDR: "niga:123456789@tcp(db:3306)/myapp?parseTime=true"
+      DB_MAX_OPEN_CONN: 30
+      DB_MAX_IDLE_CONN: 30
+      DB_MAX_IDLE_TIME: 15m
+      REDIS_ADDR: "redis:6379"
+    ports:
+      - "8081:8081"
+
+volumes:
+  db_data:
+  redis_data:
